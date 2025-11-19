@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script src="meteo.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -13,17 +13,17 @@
             <h1>Météo</h1>
         </div>
         <div class="weather-info">
-            <div id="condition-icon">Icone Condition</div>
+            <img id="condition-icon" alt="Icone Condition"/>
             <div id="temperature">Température: -- °C</div>
             <div id="condition-text">Chargement...</div>
             <div id="city">Ville</div>
         </div>
         <div class="details">
-            <div id="wind-speed">Vitesse du vent: -- m/s</div>
+            <div id="wind-speed">Vitesse du vent: -- km/h</div>
             <div id="feels-like">Ressenti: -- °C</div>
             <div id="humidity">Humidité: -- %</div>
         </div>
-        <div class="last-updated">Dernière mise à jour</div>
+        <div id="last-updated">Dernière mise à jour</div>
     </div>
     
 </body>

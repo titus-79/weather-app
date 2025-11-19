@@ -1,0 +1,88 @@
+let config = null;
+
+async function loadConf() {
+    const response = await fetch('conf.json');
+    const config = await response.json();
+    return config;
+}
+async function fetchWeatherData(ville, api_Key) {
+    const url = `https://api.weatherapi.com/v1/current.json?key=${api_Key}&q=${ville}&lang=fr`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+}
+
+async function updateWeather() {
+    if (!config) {
+        config = await loadConf();
+    }
+    const weatherData = await fetchWeatherData(config.ville, config.api_key);
+    if (weatherData && weatherData.current) {
+        document.getElementById('condition-icon').src = `https:${weatherData.current.condition.icon}`;
+        document.getElementById('temperature').textContent = `${weatherData.current.temp_c} °C`;
+        document.getElementById('condition-text').textContent = weatherData.current.condition.text;
+        document.getElementById('city').textContent = `${weatherData.location.name}, ${weatherData.location.region}`;
+        document.getElementById('wind-speed').textContent = `Vent: ${weatherData.current.wind_kph} kph ${weatherData.current.wind_dir}`;
+        document.getElementById('feels-like').textContent = `Ressenti: ${weatherData.current.feelslike_c} °C`;
+        document.getElementById('humidity').textContent = `Humidité: ${weatherData.current.humidity} %`;
+        document.getElementById('last-updated').textContent = `Dernière mise à jour: ${weatherData.current.last_updated}`;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await updateWeather() ;
+});
+
+
+/*
+ {
+     "ville": "Niort",
+     "api_key": "50717e49bb624e5092a145346251911"
+ }
+ const url = `https://api.weatherapi.com/v1/current.json?key=50717e49bb624e5092a145346251911&q=Niort&lang=fr`;
+
+ {"location":
+    {"name":"Niort",
+    "region":"Poitou-Charentes",
+    "country":"France","lat":46.3167,
+    "lon":-0.4667,"tz_id":"Europe/Paris",
+    "localtime_epoch":1763570432,
+    "localtime":"2025-11-19 17:40"},
+ "current":
+    {"last_updated_epoch":1763569800,
+    "last_updated":"2025-11-19 17:30",
+    "temp_c":9.1,
+    "temp_f":48.4,
+    "is_day":0,
+    "condition":
+        {"text":"Clair","icon":"//cdn.weatherapi.com/weather/64x64/night/113.png","code":1000},
+        "wind_mph":13.0,
+        "wind_kph":20.9,
+        "wind_degree":329,
+        "wind_dir":"NNW",
+        "pressure_mb":1011.0,
+        "pressure_in":29.85,
+        "precip_mm":0.0,
+        "precip_in":0.0,
+        "humidity":62,
+        "cloud":0,
+        "feelslike_c":6.2,
+        "feelslike_f":43.1,
+        "windchill_c":2.9,
+        "windchill_f":37.3,
+        "heatindex_c":6.6,
+        "heatindex_f":43.8,
+        "dewpoint_c":2.2,
+        "dewpoint_f":35.9,
+        "vis_km":10.0,
+        "vis_miles":6.0,
+        "uv":0.0,
+        "gust_mph":20.4,
+        "gust_kph":32.9,
+        "short_rad":0,
+        "diff_rad":0,
+        "dni":0,
+        "gti":0}}
+
+
+*/
