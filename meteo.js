@@ -1,23 +1,55 @@
 let config = null;
 
 async function loadConf() {
-    const response = await fetch('conf.json');
-    const config = await response.json();
-    return config;
+    try {
+        const response = await fetch('conf.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        config = await response.json();
+        console.log("Configuration chargée :", config);
+        return config;
+    } catch (error) {
+        console.error("Erreur lors du chargement de la configuration :", error);
+        return null;
+    }
 }
+
 async function fetchWeatherData(ville, api_Key) {
     const url = `https://api.weatherapi.com/v1/current.json?key=${api_Key}&q=${ville}&lang=fr`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.error) {
+            throw new Error(`Erreur API: ${data.error.message}`);
+        }
+        if (data.location.country !== "France") {
+            console.log("La ville trouvée n'est pas en France.");}
+        console.log("Données météo récupérées :", data);
+        return data;
+    
+    } catch (error) {
+            console.error("Erreur lors de la récupération des données météo :", error);
+            return null;
+        }
 }
 
 async function updateWeather() {
-    if (!config) {
+    try {
+        if (!config) {
         config = await loadConf();
-    }
-    const weatherData = await fetchWeatherData(config.ville, config.api_key);
-    if (weatherData && weatherData.current) {
+        }
+        if (!config.ville || !config.api_key) {
+            throw new Error('Configuration incomplète (ville ou api_key manquante)');
+        }
+
+        const weatherData = await fetchWeatherData(config.ville, config.api_key);
+        if (!weatherData || !weatherData.current) {
+            throw new Error('Données météo invalides');
+        }
         document.getElementById('condition-icon').src = `https:${weatherData.current.condition.icon}`;
         document.getElementById('temperature').textContent = `${weatherData.current.temp_c} °C`;
         document.getElementById('condition-text').textContent = weatherData.current.condition.text;
@@ -26,7 +58,18 @@ async function updateWeather() {
         document.getElementById('feels-like').textContent = `Ressenti: ${weatherData.current.feelslike_c} °C`;
         document.getElementById('humidity').textContent = `Humidité: ${weatherData.current.humidity} %`;
         document.getElementById('last-updated').textContent = `Dernière mise à jour: ${weatherData.current.last_updated}`;
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        document.getElementById('temperature').textContent = 'N/A';
+        document.getElementById('condition-text').textContent = 'N/A';
+        document.getElementById('city').textContent = 'N/A';
+        document.getElementById('wind-speed').textContent = 'N/A';
+        document.getElementById('feels-like').textContent = 'N/A';
+        document.getElementById('humidity').textContent = 'N/A';
+        document.getElementById('last-updated').textContent = 'Erreur de chargement des données météo';
     }
+   
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
