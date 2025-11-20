@@ -72,8 +72,10 @@ async function updateWeather() {
    
 }
 
+let timerId = null;
 document.addEventListener("DOMContentLoaded", async () => {
-  await updateWeather() ;
+    await updateWeather();
+    timerId = setInterval(updateWeather, 3600000);
 });
 
 
