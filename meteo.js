@@ -54,9 +54,21 @@ async function updateWeather() {
         document.getElementById('temperature').textContent = `${weatherData.current.temp_c} °C`;
         document.getElementById('condition-text').textContent = weatherData.current.condition.text;
         document.getElementById('city').textContent = `${weatherData.location.name}, ${weatherData.location.region}`;
-        document.getElementById('wind-speed').textContent = `Vent: ${weatherData.current.wind_kph} kph ${weatherData.current.wind_dir}`;
-        document.getElementById('feels-like').textContent = `Ressenti: ${weatherData.current.feelslike_c} °C`;
-        document.getElementById('humidity').textContent = `Humidité: ${weatherData.current.humidity} %`;
+        let windSpeedDiv = document.getElementById('wind-speed');
+        windSpeedDiv.innerHTML = 'Vent:';
+        let windInfo = document.createElement('div');
+        windInfo.textContent = `${weatherData.current.wind_kph} km/h ${weatherData.current.wind_dir}`;
+        windSpeedDiv.appendChild(windInfo);
+        let feelsLikeDiv = document.getElementById('feels-like');
+        feelsLikeDiv.innerHTML = 'Ressenti:';
+        let feelsLikeInfo = document.createElement('div');
+        feelsLikeInfo.textContent = `${weatherData.current.feelslike_c} °C`;
+        feelsLikeDiv.appendChild(feelsLikeInfo)
+        let humidityDiv =document.getElementById('humidity');
+        humidityDiv.innerHTML = 'Humidité:';
+        let humidityInfo =document.createElement('div');
+        humidityInfo.textContent = `${weatherData.current.humidity} %`;
+        humidityDiv.appendChild(humidityInfo);
         document.getElementById('last-updated').textContent = `Dernière mise à jour: ${weatherData.current.last_updated}`;
 
     } catch (error) {
