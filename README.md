@@ -1,5 +1,8 @@
 # Application Météo - Transports en Commun
 
+## Aperçu
+![Aperçu de l'application](./assets/screenshot.png)
+
 ## Description
 Application web d'affichage météo destinée aux écrans d'information dans les transports en commun.
 
