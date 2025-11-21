@@ -21,19 +21,23 @@
     align-items: center;   
     color: #333;
 }
+
 #temperature {
     font-size: 2.5em;
     font-weight: bold;
     margin: 0 0 5px;
 }
+
 #condition-text {
     font-size: 1em;
     margin-bottom: 10px;
 }
+
 #condition-icon {
     width: 150px;
     height: 150px;
 }
+
 #city {
     font-size: 0.8em;
     font-weight: bold;
@@ -46,17 +50,15 @@
     margin-bottom: 10px;
     font-size: 0.9em;
     color: #333;
+    font-weight: bold;
 }
+
 .wind-speed, .feels-like, .humidity {
     border: 1px solid #2d0794;
     border-radius: 5px;
     text-align: center;
     padding: 5px 5px;
     flex:content;
-}
-
-#wind-speed, #feels-like, #humidity {
-    font-weight: bold;
 }
 
 #last-updated {
